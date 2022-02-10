@@ -4,7 +4,7 @@ document.getElementById("login-btn").addEventListener("click", function () {
   const pass = document.getElementById("user-pass");
   const userPass = pass.value;
 
-  if (userEmail == "mim@gmail.com" && userPass == "sayem") {
+  if (userEmail == "user@gmail.com" && userPass == "user") {
     window.location.href = "banking.html";
   } else {
     console.log("Invalid User");
