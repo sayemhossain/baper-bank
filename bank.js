@@ -1,49 +1,54 @@
-// this is for deposit
-document.getElementById("deposit-btn").addEventListener("click", function () {
-  // get the amount deposit
-  const depositInput = document.getElementById("deposit-amount");
-  const newDepositText = depositInput.value;
-  const newDepositAmount = parseFloat(newDepositText);
-  //   showing in deposit
-  const totalDeposit = document.getElementById("totalDeposit");
-  const previousDepositText = totalDeposit.innerText;
-  const previousDepositAmount = parseFloat(previousDepositText);
-  // add money
-  const totalNewDeposit = previousDepositAmount + newDepositAmount;
-  totalDeposit.innerText = totalNewDeposit;
+function getInputValue(inputId) {
+  const inputFeild = document.getElementById(inputId);
+  const newInputText = inputFeild.value;
+  const newAmount = parseFloat(newInputText);
+  //   clear input feild
+  inputFeild.value = "";
+  return newAmount;
+}
+function updateTotalFeild(totalFeildId, newAmount) {
+  const totalAmount = document.getElementById(totalFeildId);
+  const previousAmountText = totalAmount.innerText;
+  const previousAmount = parseFloat(previousAmountText);
+  const totalNewAmount = previousAmount + newAmount;
+  totalAmount.innerText = totalNewAmount;
+}
 
-  // update account balance
-  const totalBalance = document.getElementById("totalBalance");
+function getCurrentBalance() {
   const previousTotalBalanceText = totalBalance.innerText;
   const previousTotalBalance = parseFloat(previousTotalBalanceText);
-  const totalNewBalance = previousTotalBalance + newDepositAmount;
-  totalBalance.innerText = totalNewBalance;
+  return previousTotalBalance;
+}
 
-  //   clear deposit input feild
-  depositInput.value = "";
+function updateBalance(newAmount, isAdd) {
+  const totalBalance = document.getElementById("totalBalance");
+  const previousTotalBalance = getCurrentBalance();
+  if (isAdd == true) {
+    const totalNewBalance = previousTotalBalance + newAmount;
+    totalBalance.innerText = totalNewBalance;
+  } else {
+    const totalNewBalance = previousTotalBalance - newAmount;
+    totalBalance.innerText = totalNewBalance;
+  }
+}
+// this is for deposit
+document.getElementById("deposit-btn").addEventListener("click", function () {
+  const newDepositAmount = getInputValue("deposit-amount");
+  if (newDepositAmount > 0) {
+    updateTotalFeild("totalDeposit", newDepositAmount);
+    updateBalance(newDepositAmount, true);
+  }
 });
 
 // this is for withdraw
 document.getElementById("withdraw-btn").addEventListener("click", function () {
-  // get the amount withdraw
-  const withdrawInput = document.getElementById("withdraw-amount");
-  const newWithdrawText = withdrawInput.value;
-  const newWithdrawAmount = parseFloat(newWithdrawText);
-  //   showing in withdraw
-  const totalWithdraw = document.getElementById("totalWithdraw");
-  const previousWithdrawText = totalWithdraw.innerText;
-  const previousWithdrawAmount = parseFloat(previousWithdrawText);
-  // add money
-  const totalNewWithdraw = previousWithdrawAmount + newWithdrawAmount;
-  totalWithdraw.innerText = totalNewWithdraw;
-
-  // update account balance
-  const totalBalance = document.getElementById("totalBalance");
-  const previousTotalBalanceText = totalBalance.innerText;
-  const previousTotalBalance = parseFloat(previousTotalBalanceText);
-  const totalNewBalance = previousTotalBalance - newWithdrawAmount;
-  totalBalance.innerText = totalNewBalance;
-
-  //   clear whithdraw input feild
-  withdrawInput.value = "";
+  const newWithdrawAmount = getInputValue("withdraw-amount");
+  const currentBalance = getCurrentBalance();
+  if (newWithdrawAmount > 0 && newWithdrawAmount <= currentBalance) {
+    updateTotalFeild("totalWithdraw", newWithdrawAmount);
+    updateBalance(newWithdrawAmount, false);
+  }
+  if (newWithdrawAmount > currentBalance) {
+    alert("You don't have enough money..!");
+  }
 });
